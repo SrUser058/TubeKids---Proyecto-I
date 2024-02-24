@@ -1,0 +1,26 @@
+{
+  "name": "tubekids---proyecto-i",
+  "version": "1.0.0",
+  "description": "First proyect in web programming II",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SrUser058/TubeKids-ProyectoI.git#main"
+  },
+  "author": "Eduardo Cordero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SrUser058/TubeKids-ProyectoI/issues"
+  },
+  "homepage": "https://github.com/SrUser058/TubeKids-ProyectoI/tree/main#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.2.0",
+    "nodemon": "^3.1.0"
+  }
+}
