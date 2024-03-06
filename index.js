@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 //Database Conection
-const db = mongoose.connect(process.env.dbString);
+const db = mongoose.connect("mongodb+srv://Eduardo:AAcCFet9ViGd9Czy@testdatabase.e8b2cjg.mongodb.net/TubeKids");
 
 //
 const app = express();
@@ -18,15 +18,12 @@ const {getFather, postFather, patchFather, deleteFather, getAllFather} = require
 const {getChilds, postChilds, patchChilds, deleteChilds} = require('./controllers/childs_controler');
 
 // Escuchando los puertos
-app.get("/api/father", (req,res) => {
-
-});
-app.get("/api/father:id", getFather);
+app.get("/api/father/:id", getFather);
 app.post("/api/father", postFather);
 app.patch("/api/father/:id", patchFather);
 app.delete("/api/father/:id", deleteFather);
 
-app.get("/api/kids:id", getChilds);
+app.get("/api/kids/:id", getChilds);
 app.post("/api/kids", postChilds);
 app.patch("/api/kids/:id", patchChilds);
 app.delete("/api/kids/:id",deleteChilds);

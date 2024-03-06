@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const father = new mongoose.Schema({
     name : {type : String},
     lastname : {type : String},
-    nickname : {type: String},
     email : {type : String},
     age : {type : Number},
     password : {type : String},

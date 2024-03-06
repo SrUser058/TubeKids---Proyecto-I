@@ -8,7 +8,6 @@ const postFather = async (req, res) => {
     //Pasar los datos del request al modelo
     father.name = req.body.name;
     father.lastname = req.body.lastname;
-    father.nickname = req.body.nickname;
     father.email = req.body.email;
     father.age = req.body.age;
     father.password = req.body.password;
@@ -18,11 +17,12 @@ const postFather = async (req, res) => {
     father.avatar = req.body.avatar;
 
     // Validar que los datos no sean null
-    if (father.name && father.nickname && father.lastname && father.email && father.password && father.age && father.pin && father.name && father.country && father.birthdate) {
+    if (father.name && father.lastname && father.email && father.password && father.age && father.pin && father.country && father.birthdate) {
         await father.save()
             .then(data => {
                 res.status(201);
-                res.header({ 'location': `/api/father/?id=${data.id}` });
+                res.header({ 'location': `/api/father/?id=${data.id}`});
+                res.json();
             })
             .catch(error => {
                 res.status(422);
@@ -43,19 +43,19 @@ const getAllFather = (req,res) => {
             for(let x = 0; x <= fathers.length; x++){
                 if(fathers[x].nickname === req.body.user && fathers[x].password === req.body.password) {
                     res.status(202);
-                    res.send({verification:true});
+                    res.json({verification:true});
                 }
             };
         })
         .catch(err => {
             res.status(404);
             console.log('Internal error while search the data',err);
-            res.send({error:'Intentelo de nuevo mas tarde'});
+            res.json({error:'Intentelo de nuevo mas tarde'});
         })
     } else {
         res.status(404);
         console.log('Imposible encontrar el usuario ', err);
-        res.send({error:404});
+        res.json({error:404});
     }
 };
 
@@ -90,7 +90,7 @@ const patchFather = (req, res) => {
             }
             await Father.findByIdAndUpdate(req.params.id, father)
                 .then(answer => {
-                    res.send(answer);
+                    res.json(answer);
                 })
                 .catch(err => {
                     res.status(422);
@@ -119,13 +119,17 @@ const deleteFather = async (req,res) => {
     if(req.params && req.params.id){
         await Father.findByIdAndDelete({_id:req.params.id})
         .then(answer => {
-            res.send(answer);
+            res.json(answer);
         })
         .catch(err=>{
             res.status(422);
-            console.log('Error on delete the major',err);
+            console.log('Error on delete the account',err);
             res.json({ error:422});
         });
+    }else{
+        res.status(422);
+            console.log('No data to delete the account',err);
+            res.json({ error:422});
     };
 };
 
