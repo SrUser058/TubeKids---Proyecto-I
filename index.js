@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 //Database Conection
-const db = mongoose.connect("mongodb+srv://Eduardo:AAcCFet9ViGd9Czy@testdatabase.e8b2cjg.mongodb.net/TubeKids");
+const db = mongoose.connect(process.env.dbString);
 
 //
 const app = express();
