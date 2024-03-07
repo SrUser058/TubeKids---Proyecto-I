@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Playlist = new mongoose.Schema({
-    nameSaved : {type : String},
+    name : {type : String},
     father : {type : mongoose.ObjectId,
         ref : 'Father'},
     videos : {type : {}}

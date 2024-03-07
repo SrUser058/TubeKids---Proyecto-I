@@ -1,8 +1,8 @@
-const Playlist = requires('../models/playlistModel.js');
+const Playlist = require('../models/playlistModel.js');
 
 const getPlaylist = (req, res) => {
-    if (req.params.name && req.params.ref) {
-        Playlist.find()
+    if (req.params && req.params.id) {
+        /*Playlist.find()
             .then(playlistes => {
                 for(x = 0; x <= playlistes.length; x++){
                     if(playlistes[x].name === req.params.name && playlistes[x].father === req.params.ref){
@@ -14,6 +14,15 @@ const getPlaylist = (req, res) => {
                 res.status(422);
                 console.log('Internal error while get the playlist',err )
                 res.json({ "error": 422});
+            });*/
+            Playlist.findById(req.params.id)
+            .then((playlist) => {
+                res.json(playlist);
+            })
+            .catch(err => {
+                res.status(404);
+                console.log('Server error obtain the playlist', err)
+                res.json({ error: "The playlist doesnt exist" })
             });
     } else {
         res.status(422);
@@ -23,11 +32,11 @@ const getPlaylist = (req, res) => {
 };
 
 const postPlaylist = async (req, res) => {
-    let playlist = new Father();
+    let playlist = new Playlist();
 
     //Pasar los datos del request al modelo
     playlist.name = req.body.name;
-    playlist.father = req.body.ref;
+    playlist.father = req.body.father;
     playlist.videos = req.body.videos;
     
 
@@ -51,18 +60,10 @@ const postPlaylist = async (req, res) => {
     }
 };
 
-
-
-const patchPlaylist = (req, res) => {
+const patchPlaylist = async (req, res) => {
     //Buscar el usuario en la BD
     if (req.params && req.params.id) {
-        Playlist.findById(req.params.id, async (error, playlist) => {
-            if (err) {
-                res.status(404);
-                console.log('Error while search the playlist to patch', err);
-                res.json({ error: 404 })
-            }
-            await Father.findByIdAndUpdate(req.params.id, playlist)
+        await Playlist.findByIdAndUpdate(req.params.id, req.body)
                 .then(answer => {
                     res.json(answer);
                 })
@@ -71,7 +72,7 @@ const patchPlaylist = (req, res) => {
                     console.log('Error update the playlist');
                     res.json({ error:422});
                 });
-            playlist.save((err) => {
+            /*playlist.save((err) => {
                 if(err){
                     res.status(422);
                     console.log('Server error while saving the playlist updates',err);
@@ -79,11 +80,30 @@ const patchPlaylist = (req, res) => {
                 }
                 res.status(200);
                 res.json(father);
-            })
-        });
+            })*/
     } else {
         res.status(404);
         console.log('Internal error with the data');
         res.json({error:404});
     };
 };
+
+const deletePlaylist = async (req,res) => {
+    if(req.params && req.params.id){
+        await Playlist.findByIdAndDelete({_id:req.params.id})
+        .then(answer => {
+            res.json(answer);
+        })
+        .catch(err=>{
+            res.status(422);
+            console.log('Error on delete the playlist',err);
+            res.json({ error:422});
+        });
+    }else{
+        res.status(422);
+            console.log('No data to delete the playlist',err);
+            res.json({ error:422});
+    };
+};
+
+module.exports = {getPlaylist, postPlaylist, patchPlaylist, deletePlaylist};

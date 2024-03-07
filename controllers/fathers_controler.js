@@ -21,7 +21,7 @@ const postFather = async (req, res) => {
         await father.save()
             .then(data => {
                 res.status(201);
-                res.header({ 'location': `/api/father/?id=${data.id}`});
+                res.header({ 'location': `/api/father/?id=${data.id}` });
                 res.json();
             })
             .catch(error => {
@@ -36,26 +36,26 @@ const postFather = async (req, res) => {
     }
 };
 
-const getAllFather = (req,res) => {
-    if(req.body.user && req.body.password){
+const getAllFather = (req, res) => {
+    if (req.body.user && req.body.password) {
         Father.find()
-        .then(fathers => {
-            for(let x = 0; x <= fathers.length; x++){
-                if(fathers[x].nickname === req.body.user && fathers[x].password === req.body.password) {
-                    res.status(202);
-                    res.json({verification:true});
-                }
-            };
-        })
-        .catch(err => {
-            res.status(404);
-            console.log('Internal error while search the data',err);
-            res.json({error:'Intentelo de nuevo mas tarde'});
-        })
+            .then(fathers => {
+                for (let x = 0; x <= fathers.length; x++) {
+                    if (fathers[x].nickname === req.body.user && fathers[x].password === req.body.password) {
+                        res.status(202);
+                        res.json({ verification: true });
+                    }
+                };
+            })
+            .catch(err => {
+                res.status(404);
+                console.log('Internal error while search the data', err);
+                res.json({ error: 'Intentelo de nuevo mas tarde' });
+            })
     } else {
         res.status(404);
         console.log('Imposible encontrar el usuario ', err);
-        res.json({error:404});
+        res.json({ error: 404 });
     }
 };
 
@@ -79,58 +79,42 @@ const getFather = (req, res) => {
 }
 
 // Actualizar los datos de un usuario
-const patchFather = (req, res) => {
+const patchFather = async (req, res) => {
     //Buscar el usuario en la BD
     if (req.params && req.params.id) {
-        Father.findById(req.params.id, async (error, father) => {
-            if (err) {
-                res.status(404);
-                console.log('Error while search the user to patch', err);
-                res.json({ error: 404 })
-            }
-            await Father.findByIdAndUpdate(req.params.id, father)
-                .then(answer => {
-                    res.json(answer);
-                })
-                .catch(err => {
-                    res.status(422);
-                    console.log('Error update the user');
-                    res.json({ error:422});
-                });
-            father.save((err) => {
-                if(err){
-                    res.status(422);
-                    console.log('Server error while saving the user updates',err);
-                    res.json({error:422});
-                }
-                res.status(200);
-                res.json(father);
+        await Father.findByIdAndUpdate(req.params.id, father)
+            .then(answer => {
+                res.json(answer);
             })
-        });
+            .catch(err => {
+                res.status(422);
+                console.log('Error update the user');
+                res.json({ error: 422 });
+            });
     } else {
         res.status(404);
         console.log('Internal error with the data');
-        res.json({error:404});
+        res.json({ error: 404 });
     };
 };
 
 // Eliminar los datos de un usuario
-const deleteFather = async (req,res) => {
-    if(req.params && req.params.id){
-        await Father.findByIdAndDelete({_id:req.params.id})
-        .then(answer => {
-            res.json(answer);
-        })
-        .catch(err=>{
-            res.status(422);
-            console.log('Error on delete the account',err);
-            res.json({ error:422});
-        });
-    }else{
+const deleteFather = async (req, res) => {
+    if (req.params && req.params.id) {
+        await Father.findByIdAndDelete({ _id: req.params.id })
+            .then(answer => {
+                res.json(answer);
+            })
+            .catch(err => {
+                res.status(422);
+                console.log('Error on delete the account', err);
+                res.json({ error: 422 });
+            });
+    } else {
         res.status(422);
-            console.log('No data to delete the account',err);
-            res.json({ error:422});
+        console.log('No data to delete the account', err);
+        res.json({ error: 422 });
     };
 };
 
-module.exports = {getFather, postFather, patchFather, deleteFather, getAllFather};
+module.exports = { getFather, postFather, patchFather, deleteFather, getAllFather };
