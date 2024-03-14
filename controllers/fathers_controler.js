@@ -1,4 +1,5 @@
 
+const father = require('../models/father');
 const Father = require('../models/father');
 
 // Insertar un nuevo usuario principal en la BD
@@ -37,14 +38,15 @@ const postFather = async (req, res) => {
 };
 
 const getAllFather = (req, res) => {
-    if (req.body.user && req.body.password) {
-        Father.find()
+    if (req.query.email && req.query.password) {
+        Father.find({"email": req.query.email,"password" : req.query.password})
             .then(fathers => {
-                for (let x = 0; x <= fathers.length; x++) {
-                    if (fathers[x].nickname === req.body.user && fathers[x].password === req.body.password) {
-                        res.status(202);
-                        res.json({ verification: true });
-                    }
+                //console.log(fathers[0].email,fathers[0].password);
+                //console.log(req.query.email,req.query.password);
+                if(fathers){
+                    res.json({ verification: true }).status(202);
+                }else{
+                    res.json({ verification: false }).status(402);
                 };
             })
             .catch(err => {
@@ -52,11 +54,32 @@ const getAllFather = (req, res) => {
                 console.log('Internal error while search the data', err);
                 res.json({ error: 'Intentelo de nuevo mas tarde' });
             })
+            /*.finally((verification)=>{
+                res.json({verification:false});
+            })*/
     } else {
         res.status(404);
-        console.log('Imposible encontrar el usuario ', err);
+        console.log('Imposible encontrar el usuario');
         res.json({ error: 404 });
     }
+};
+
+const getEmail = (req, res) => {
+    if(req.query.email){
+        Father.find({'email': req.query.email})
+        .then(fathers => {
+            if(fathers){
+                res.json({'verification':true}).status(201);
+            } else {
+                res.json({'verification':false}).status(401);
+            }
+        }).catch(err => {
+            res.json({error:'Imposible encontrar el correo en la bd'}).status(401);
+            console.log(err);
+        })
+    } else {
+        res.json({error:'Error en los datos enviados'}).status(401);
+    };
 };
 
 // Obtener los datos del usuario principal de la BD
@@ -117,4 +140,4 @@ const deleteFather = async (req, res) => {
     };
 };
 
-module.exports = { getFather, postFather, patchFather, deleteFather, getAllFather };
+module.exports = { getFather, postFather, patchFather, deleteFather, getAllFather, getEmail};

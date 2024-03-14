@@ -1,19 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 //Database Conection
-const db = mongoose.connect("mongodb+srv://Eduardo:AAcCFet9ViGd9Czy@testdatabase.e8b2cjg.mongodb.net/TubeKids");
+const db = mongoose.connect(process.env.dbString); // Variable de entorno
 
 //
 const app = express();
 app.use(express.json());
 app.use(cors({
-    domain: '*',
+    domain: 'http://127.0.0.1:5500',
     methods: "*"
 }))
 
-const {getFather, postFather, patchFather, deleteFather, getAllFather} = require('./controllers/fathers_controler');
+const {getFather, postFather, patchFather, deleteFather, getAllFather, getEmail} = require('./controllers/fathers_controler');
 
 const {getChilds, postChilds, patchChilds, deleteChilds} = require('./controllers/childs_controler');
 
@@ -35,7 +36,8 @@ app.post("/api/playlists", postPlaylist);
 app.patch("/api/playlists/:id", patchPlaylist);
 app.delete("/api/playlists/:id", deletePlaylist);
 
-app.get("/api/login", getAllFather)
+app.get("/api/login/", getAllFather);
+app.get("/api/register/", getEmail);
 
 // Star the service in local network
 app.listen(3001, () => console.log(`Service listening on port 3001!`))
