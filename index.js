@@ -22,23 +22,24 @@ const {getPlaylist, postPlaylist, patchPlaylist, deletePlaylist} = require('./co
 
 app.get("/api/login/", getAllFather);
 app.get("/api/register/", getEmail);
-app.get("/api/childs/father/:father", getChildsByFather);
+app.get("/api/childs/father/", getChildsByFather);
+app.get("/api/childs/", getChilds);
 
 // Escuchando los puertos
-app.get("/api/father/:id", getFather);
+app.get("/api/father/", getFather);
 app.post("/api/father/", postFather);
-app.patch("/api/father/:id", patchFather);
-app.delete("/api/father/:id", deleteFather);
+app.patch("/api/father/", patchFather);
+app.delete("/api/father/", deleteFather);
 
-app.get("/api/childs/:id", getChilds);
+
 app.post("/api/childs", postChilds);
-app.patch("/api/childs/:id", patchChilds);
-app.delete("/api/childs/:id",deleteChilds);
+app.patch("/api/childs/", patchChilds);
+app.delete("/api/childs/",deleteChilds);
 
-app.get("/api/playlists/:id", getPlaylist);
+app.get("/api/playlists/", getPlaylist);
 app.post("/api/playlists", postPlaylist);
-app.patch("/api/playlists/:id", patchPlaylist);
-app.delete("/api/playlists/:id", deletePlaylist);
+app.patch("/api/playlists/", patchPlaylist);
+app.delete("/api/playlists/", deletePlaylist);
 
 
 

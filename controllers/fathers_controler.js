@@ -88,7 +88,7 @@ const getEmail = (req, res) => {
 // Obtener los datos del usuario principal de la BD
 const getFather = (req, res) => {
     if (req.query.id) {
-        Father.findById(req.params.id)
+        Father.findById(req.query.id)
             .then((father) => {
                 res.json(father);
             })

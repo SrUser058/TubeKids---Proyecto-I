@@ -35,15 +35,15 @@ const postChilds = async (req, res) => {
 
 // Obtener los datos del usuario principal de la BD
 const getChilds = (req, res) => {
-    if (req.params && req.params.id) {
-        Childs.findById(req.params.id)
+    if (req.query && req.query.id) {
+        Childs.findById(req.query.id)
             .then((childs) => {
                 res.json(childs);
             })
             .catch(err => {
                 res.status(404);
-                console.log('Server error obtain the user', err)
-                res.json({ error: "The user doesnt exist" })
+                console.log('Server error obtain the user', err);
+                res.json({ error: "The user doesnt exist" });
             });
     } else {
         res.status(404);
@@ -55,7 +55,7 @@ const getChilds = (req, res) => {
 const getChildsByFather = (req, res) => {
     //console.log(req.query.father);
     if (req.query.father) {
-        Childs.findById(req.query.father).populate('fathers')
+        Childs.find({father:req.query.father})
             .then((childs) => {
                 if(childs[0]){
                     res.json(childs);
