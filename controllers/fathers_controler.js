@@ -1,5 +1,5 @@
 
-const father = require('../models/father');
+
 const Father = require('../models/father');
 
 // Insertar un nuevo usuario principal en la BD
@@ -17,13 +17,14 @@ const postFather = async (req, res) => {
     father.birthdate = req.body.birthdate;
     father.avatar = req.body.avatar;
 
+    console.log(req.body);
     // Validar que los datos no sean null
-    if (father.name && father.lastname && father.email && father.password && father.age && father.pin && father.country && father.birthdate) {
+    if (father.name && father.lastname && father.email && father.password && father.age && father.pin && father.pin.toString().length == 6 && father.country && father.birthdate && father.avatar) {
         await father.save()
             .then(data => {
-                res.status(201);
-                res.header({ 'location': `/api/father/?id=${data.id}` });
-                res.json();
+                //res.status(201);
+                res.header({ 'location': `/api/father/?id=${data.id}`});
+                res.json({location:`/api/father/?id=${data.id}`}).status(201);
             })
             .catch(error => {
                 res.status(422);
@@ -39,13 +40,15 @@ const postFather = async (req, res) => {
 
 const getAllFather = (req, res) => {
     if (req.query.email && req.query.password) {
-        Father.find({"email": req.query.email,"password" : req.query.password})
+        Father.find({'email': req.query.email,'password' : req.query.password})
             .then(fathers => {
                 //console.log(fathers[0].email,fathers[0].password);
                 //console.log(req.query.email,req.query.password);
-                if(fathers){
-                    res.json({ verification: true }).status(202);
+                if(fathers[0].email == req.query.email && fathers[0].password == req.query.password){
+                    //console.log(1);
+                    res.json({ verification: true, id: fathers[0].id }).status(202);
                 }else{
+                    //console.log(2);
                     res.json({ verification: false }).status(402);
                 };
             })
@@ -68,7 +71,7 @@ const getEmail = (req, res) => {
     if(req.query.email){
         Father.find({'email': req.query.email})
         .then(fathers => {
-            if(fathers){
+            if(!fathers[0]){
                 res.json({'verification':true}).status(201);
             } else {
                 res.json({'verification':false}).status(401);
@@ -84,7 +87,7 @@ const getEmail = (req, res) => {
 
 // Obtener los datos del usuario principal de la BD
 const getFather = (req, res) => {
-    if (req.params && req.params.id) {
+    if (req.query.id) {
         Father.findById(req.params.id)
             .then((father) => {
                 res.json(father);
@@ -104,7 +107,7 @@ const getFather = (req, res) => {
 // Actualizar los datos de un usuario
 const patchFather = async (req, res) => {
     //Buscar el usuario en la BD
-    if (req.params && req.params.id) {
+    if (req.query.id) {
         await Father.findByIdAndUpdate(req.params.id, father)
             .then(answer => {
                 res.json(answer);
@@ -123,7 +126,7 @@ const patchFather = async (req, res) => {
 
 // Eliminar los datos de un usuario
 const deleteFather = async (req, res) => {
-    if (req.params && req.params.id) {
+    if (req.query.id) {
         await Father.findByIdAndDelete({ _id: req.params.id })
             .then(answer => {
                 res.json(answer);

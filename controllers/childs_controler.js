@@ -1,5 +1,6 @@
 
 const Childs = require('../models/childs.js');
+const ObjectId = require('mongodb').ObjectID;
 
 // Insertar un nuevo usuario principal en la BD
 const postChilds = async (req, res) => {
@@ -14,11 +15,11 @@ const postChilds = async (req, res) => {
     childs.avatar = req.body.avatar;
 
     // Validar que los datos no sean null
-    if (childs.name && childs.age && childs.pin && childs.father) {
+    if (childs.name && childs.age && childs.pin && childs.pin.toString().length == 6 && childs.father) {
         await childs.save()
             .then(data => {
-                res.status(201);
-                res.header({ 'location': `/api/kids/?id=${data.id}` });
+                //res.header({ 'location': `/api/kids/?id=${data.id}` });
+                res.json({ 'location': `/api/kids/?id=${data.id}` }).status(201);
             })
             .catch(error => {
                 res.status(422);
@@ -42,6 +43,29 @@ const getChilds = (req, res) => {
             .catch(err => {
                 res.status(404);
                 console.log('Server error obtain the user', err)
+                res.json({ error: "The user doesnt exist" })
+            });
+    } else {
+        res.status(404);
+        console.log('Internal error with the user data');
+        res.json({ error: 404 })
+    };
+};
+
+const getChildsByFather = (req, res) => {
+    //console.log(req.query.father);
+    if (req.query.father) {
+        Childs.findById(req.query.father).populate('fathers')
+            .then((childs) => {
+                if(childs[0]){
+                    res.json(childs);
+                } else {
+                    res.json(undefined);
+                }
+            })
+            .catch(err => {
+                res.status(404);
+                console.log('Server error obtaining the user', err)
                 res.json({ error: "The user doesnt exist" })
             });
     } else {
@@ -90,4 +114,4 @@ const deleteChilds = async (req, res) => {
     };
 };
 
-module.exports = { getChilds, postChilds, patchChilds, deleteChilds };
+module.exports = { getChilds, postChilds, patchChilds, deleteChilds, getChildsByFather};

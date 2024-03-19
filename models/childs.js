@@ -5,7 +5,7 @@ const childs = new mongoose.Schema({
     age : {type : Number},
     pin : {type : Number},
     father : {type : mongoose.ObjectId,
-    ref : 'Father'},
+    ref : 'Fathers'},
     avatar : {type : Number}
 });
 

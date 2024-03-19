@@ -16,13 +16,17 @@ app.use(cors({
 
 const {getFather, postFather, patchFather, deleteFather, getAllFather, getEmail} = require('./controllers/fathers_controler');
 
-const {getChilds, postChilds, patchChilds, deleteChilds} = require('./controllers/childs_controler');
+const {getChilds, postChilds, patchChilds, deleteChilds, getChildsByFather} = require('./controllers/childs_controler');
 
 const {getPlaylist, postPlaylist, patchPlaylist, deletePlaylist} = require('./controllers/playlists_controler');
 
+app.get("/api/login/", getAllFather);
+app.get("/api/register/", getEmail);
+app.get("/api/childs/father/:father", getChildsByFather);
+
 // Escuchando los puertos
 app.get("/api/father/:id", getFather);
-app.post("/api/father", postFather);
+app.post("/api/father/", postFather);
 app.patch("/api/father/:id", patchFather);
 app.delete("/api/father/:id", deleteFather);
 
@@ -36,8 +40,7 @@ app.post("/api/playlists", postPlaylist);
 app.patch("/api/playlists/:id", patchPlaylist);
 app.delete("/api/playlists/:id", deletePlaylist);
 
-app.get("/api/login/", getAllFather);
-app.get("/api/register/", getEmail);
+
 
 // Star the service in local network
 app.listen(3001, () => console.log(`Service listening on port 3001!`))
