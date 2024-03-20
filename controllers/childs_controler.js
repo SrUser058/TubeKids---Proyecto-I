@@ -60,7 +60,7 @@ const getChildsByFather = (req, res) => {
                 if(childs[0]){
                     res.json(childs);
                 } else {
-                    res.json(undefined);
+                    res.json({childs:'void'});
                 }
             })
             .catch(err => {
@@ -78,8 +78,8 @@ const getChildsByFather = (req, res) => {
 // Actualizar los datos de un usuario
 const patchChilds = async (req, res) => {
     //Buscar el usuario en la BD
-    if (req.params && req.params.id) {
-        await Childs.findByIdAndUpdate(req.params.id, childs)
+    if (req.query && req.query.id) {
+        await Childs.findByIdAndUpdate(req.query.id, childs)
             .then(answer => {
                 res.send(answer);
             })
@@ -97,8 +97,8 @@ const patchChilds = async (req, res) => {
 
 // Eliminar los datos de un usuario
 const deleteChilds = async (req, res) => {
-    if (req.params && req.params.id) {
-        await Childs.findByIdAndDelete({ _id: req.params.id })
+    if (req.query && req.query.id) {
+        await Childs.findByIdAndDelete({ _id: req.query.id })
             .then(answer => {
                 res.send(answer);
             })

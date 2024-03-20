@@ -108,9 +108,9 @@ const getFather = (req, res) => {
 const patchFather = async (req, res) => {
     //Buscar el usuario en la BD
     if (req.query.id) {
-        await Father.findByIdAndUpdate(req.params.id, father)
+        await Father.findByIdAndUpdate(req.query.id, req.body)
             .then(answer => {
-                res.json(answer);
+                res.json(answer).status(201);
             })
             .catch(err => {
                 res.status(422);
@@ -127,7 +127,7 @@ const patchFather = async (req, res) => {
 // Eliminar los datos de un usuario
 const deleteFather = async (req, res) => {
     if (req.query.id) {
-        await Father.findByIdAndDelete({ _id: req.params.id })
+        await Father.findByIdAndDelete({ _id: req.query.id })
             .then(answer => {
                 res.json(answer);
             })
