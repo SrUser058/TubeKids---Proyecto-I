@@ -46,7 +46,7 @@ const getAllFather = (req, res) => {
                 //console.log(req.query.email,req.query.password);
                 if(fathers[0].email == req.query.email && fathers[0].password == req.query.password){
                     //console.log(1);
-                    res.json({ verification: true, id: fathers[0].id }).status(202);
+                    res.json({ verification: true, id: fathers[0].id }).status(201);
                 }else{
                     //console.log(2);
                     res.json({ verification: false }).status(402);
@@ -113,9 +113,8 @@ const patchFather = async (req, res) => {
                 res.json(answer).status(201);
             })
             .catch(err => {
-                res.status(422);
                 console.log('Error update the user');
-                res.json({ error: 422 });
+                res.json(undefined).status(422);
             });
     } else {
         res.status(404);

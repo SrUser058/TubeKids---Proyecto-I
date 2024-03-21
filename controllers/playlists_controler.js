@@ -87,8 +87,8 @@ const patchPlaylist = async (req, res) => {
             })
             .catch(err => {
                 res.status(422);
-                console.log('Error update the playlist');
-                res.json({ error: 422 });
+                console.log('Error update the playlist', err);
+                res.json({result: 422});
             });
         /*playlist.save((err) => {
             if(err){
@@ -113,9 +113,8 @@ const deletePlaylist = async (req, res) => {
                 res.json(answer);
             })
             .catch(err => {
-                res.status(422);
                 console.log('Error on delete the playlist', err);
-                res.json({ error: 422 });
+                res.json({ result: 422 }).status(422);
             });
     } else {
         res.status(422);

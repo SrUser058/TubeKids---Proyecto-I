@@ -11,7 +11,6 @@ const postChilds = async (req, res) => {
     childs.age = req.body.age;
     childs.pin = req.body.pin;
     childs.father = req.body.father;
-    childs.playlist = req.body.playlist;
     childs.avatar = req.body.avatar;
 
     // Validar que los datos no sean null
@@ -79,14 +78,13 @@ const getChildsByFather = (req, res) => {
 const patchChilds = async (req, res) => {
     //Buscar el usuario en la BD
     if (req.query && req.query.id) {
-        await Childs.findByIdAndUpdate(req.query.id, childs)
+        await Childs.findByIdAndUpdate(req.query.id, req.body)
             .then(answer => {
-                res.send(answer);
+                res.json({confirm:true}).status(201);
             })
             .catch(err => {
-                res.status(422);
                 console.log('Error update the user', err);
-                res.json({ error: 422 });
+                res.json(undefined).status(422);
             });
     } else {
         res.status(404);
@@ -100,12 +98,12 @@ const deleteChilds = async (req, res) => {
     if (req.query && req.query.id) {
         await Childs.findByIdAndDelete({ _id: req.query.id })
             .then(answer => {
-                res.send(answer);
+                res.json({confirm:true}).status(201);
             })
             .catch(err => {
                 res.status(422);
                 console.log('Error on delete the user', err);
-                res.json({ error: 422 });
+                res.json(undefined);
             });
     } else {
         res.status(422);
