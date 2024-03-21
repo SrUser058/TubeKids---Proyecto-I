@@ -62,9 +62,8 @@ const postPlaylist = async (req, res) => {
     if (playlist.name && playlist.father && playlist.videos) {
         await playlist.save()
             .then(data => {
-                res.status(201);
                 res.header({ 'location': `/api/playlist/?id=${data.id}` });
-                res.json();
+                res.json({'location': `/api/playlist/?id=${data.id}`}).status(201);
             })
             .catch(error => {
                 res.status(422);
